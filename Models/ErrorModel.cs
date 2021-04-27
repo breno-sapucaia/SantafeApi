@@ -10,5 +10,11 @@ namespace SantafeApi.Models
 		public string FieldName { get; set; }
 
 		public string Message { get; set; }
+
+		public ErrorModel(){}
+		public ErrorModel(string message)
+		{
+			this.Message = message;
+		}
 	}
 }

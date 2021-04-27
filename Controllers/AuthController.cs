@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -37,23 +36,20 @@ namespace SantafeApi.Controllers
 			_userManager = userManager;
 			_signInManager = signInManager;
 		}
-
+		/// <summary>
+		///  Efetua o login no sistema e gerar um token do tipo - Bearer JWT
+		/// </summary>
+		/// <param name="loginModel">loginModel</param>
+		/// <returns>Retorna um token token JWT</returns>
+		/// <response code="200">Retorna o JWT</response>
+		/// <response code="400">Senha passada é inválida</response>
+		/// <response code="404">Usuário não existe</response>
 		[AllowAnonymous]
-		[HttpGet("getFruits")]
-		public ActionResult GetFruits()
-		{
-			var list = new string[] { "banana", "apple" };
-			return Ok(list);
-		}
-		[HttpGet("getFruitsAuthenticated")]
-		public ActionResult GetFruitsAuthenticated()
-		{
-			var list = new string[] { "banana", "apple" };
-			return Ok(list);
-		}
-
-		[AllowAnonymous]
-		[HttpPost("getToken")]
+		[HttpPost("login")]
+		[Produces("application/json")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(404)]
+		[ProducesResponseType(400)]
 		public async Task<ActionResult> GetToken([FromBody] LoginModel loginModel)
 		{
 			var user = _dbContext.Users.FirstOrDefault(x => x.Email == loginModel.Email);
@@ -81,14 +77,23 @@ namespace SantafeApi.Controllers
 				}
 				else
 				{
-					return Ok("senha inválida");
+					return BadRequest(new ErrorModel("Senha inválida") { FieldName = "Password" });
 				}
 
 			}
-			return Ok("Seu usuário não existe");
+			return NotFound(new ErrorModel("Usuário não existe"));
 		}
-
+		/// <summary>
+		///  Efetua o registro de um novo usuário.
+		/// </summary>
+		/// <param name="registerModel"></param>
+		/// <returns>Retorna uma mensagem de usuário cadastrado.</returns>
+		/// <response code="200"> retorna uma mensagem de sucesso.</response>
+		/// <response code="400"> retorna os possíveis erros do esquema de Model,</response>
 		[AllowAnonymous]
+		[Produces("application/json")]
+		[ProducesResponseType(400)]
+		[ProducesResponseType(200)]
 		[HttpPost("register")]
 		public async Task<ActionResult> Register([FromBody] RegisterModel registerModel)
 		{
@@ -103,18 +108,80 @@ namespace SantafeApi.Controllers
 
 			if (result.Succeeded)
 			{
-
-				return Ok(new { Result = "Usuário criado com sucesso" });
+				//TODO: enviar email com token.
+				return Ok(new { Message = "Usuário criado com sucesso" });
 			}
 			else
 			{
 				var stringBuilder = new StringBuilder();
-				foreach( var error in result.Errors)
+				foreach (var error in result.Errors)
 				{
 					stringBuilder.Append(error.Description);
 					stringBuilder.Append("\r\n");
 				}
-				return BadRequest(stringBuilder.ToString());
+				return BadRequest(new ErrorModel(stringBuilder.ToString()));
+
+			};
+		}
+
+		/// <summary>
+		/// Solicita a geração de um token através do Email do usuário registrado.
+		/// </summary>
+		/// <param name="resetPasswordModel">Usado para receber o Email do usuário</param>
+		/// <returns>Retorna um token válido usado para resetar a senha do usuário.</returns>
+		/// <response code="200"> Retorna um JWT</response>
+		/// <response code="404"> Retorna mensagem de erro de usuário não encontrado</response>
+		[AllowAnonymous]
+		[Produces("application/json")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(404)]
+		[HttpPost("password-reset")]
+		public async Task<ActionResult> ResetPassword([FromBody] ResetPasswordModel resetPasswordModel)
+		{
+			var user = await _userManager.FindByEmailAsync(resetPasswordModel.Email);
+			if (user == null)
+				return NotFound(new ErrorModel
+				{
+					Message = "O usuário não existe",
+					FieldName = "Email"
+				});
+
+			var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+			return Ok(new { Token = token });
+		}
+		/// <summary>
+		///		Valida token passado e reseta a senha se for válido.
+		/// </summary>
+		/// <param name="resetPasswordTokenModel"></param>
+		/// <returns> Mensagem de sucesso</returns>
+		/// <response code="200">Mesagem de sucesso</response>
+		/// <response code="400">Erros gerados pelo UserManager</response>
+		[AllowAnonymous]
+		[Produces("application/json")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400)]
+		[HttpPut("password-reset-with-token")]
+		public async Task<ActionResult> ResetPasswordWithToken([FromBody] ResetPasswordTokenModel resetPasswordTokenModel)
+		{
+			var user = await _userManager.FindByEmailAsync(resetPasswordTokenModel.Email);
+
+			if (user == null)
+				return NotFound(new ErrorModel("user not found"));
+
+			var result = await _userManager.ResetPasswordAsync(user, resetPasswordTokenModel.Token, resetPasswordTokenModel.Password);
+			if (result.Succeeded)
+			{
+				return Ok(new { Message = "Senha alterada com sucesso" });
+			}
+			else
+			{
+				var stringBuilder = new StringBuilder();
+				foreach (var error in result.Errors)
+				{
+					stringBuilder.Append(error.Description);
+					stringBuilder.Append("\r\n");
+				}
+				return BadRequest(new ErrorModel(stringBuilder.ToString()));
 			}
 		}
 

@@ -18,6 +18,10 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentValidation.AspNetCore;
 using SantafeApi.Filters;
+using System.Reflection;
+using System.IO;
+using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.AspNetCore.Routing;
 
 namespace SantafeApi
 {
@@ -68,16 +72,19 @@ namespace SantafeApi
 
 
 			});
+			services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 			services
-				.AddControllers(options =>
-					options.Filters.Add<ValidationFilter>()
-				)
-				.AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<Startup>()); 
-				
-				;
+				.AddControllers(options => options.Filters.Add<ValidationFilter>())
+				.AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<Startup>());
+			
 			services.AddSwaggerGen(c =>
 			{
 				c.SwaggerDoc("v1", new OpenApiInfo { Title = "SantafeApi", Version = "v1" });
+				var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+				var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+				c.IncludeXmlComments(xmlPath);
+				c.AddFluentValidationRules();
+				;
 			});
 		}
 
