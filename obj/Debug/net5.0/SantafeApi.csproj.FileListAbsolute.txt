@@ -448,3 +448,10 @@ C:\Projetos\Autonomo\SantafeCheck\SantafeApi\obj\Debug\net5.0\SantafeApi.dll
 C:\Projetos\Autonomo\SantafeCheck\SantafeApi\obj\Debug\net5.0\ref\SantafeApi.dll
 C:\Projetos\Autonomo\SantafeCheck\SantafeApi\obj\Debug\net5.0\SantafeApi.pdb
 C:\Projetos\Autonomo\SantafeCheck\SantafeApi\obj\Debug\net5.0\SantafeApi.genruntimeconfig.cache
+C:\Projetos\Autonomo\SantafeCheck\SantafeApi\bin\Debug\net5.0\Microsoft.Extensions.DependencyModel.dll
+C:\Projetos\Autonomo\SantafeCheck\SantafeApi\bin\Debug\net5.0\Scrutor.dll
+C:\Projetos\Autonomo\SantafeCheck\SantafeApi\bin\Debug\net5.0\Swashbuckle.AspNetCore.Filters.dll
+C:\Projetos\Autonomo\SantafeCheck\SantafeApi\bin\Debug\net5.0\Swashbuckle.AspNetCore.Filters.Abstractions.dll
+C:\Projetos\Autonomo\SantafeCheck\SantafeApi\bin\Debug\net5.0\MailKit.dll
+C:\Projetos\Autonomo\SantafeCheck\SantafeApi\bin\Debug\net5.0\MimeKit.dll
+C:\Projetos\Autonomo\SantafeCheck\SantafeApi\bin\Debug\net5.0\BouncyCastle.Crypto.dll
