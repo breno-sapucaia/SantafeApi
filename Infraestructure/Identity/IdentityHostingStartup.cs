@@ -25,6 +25,7 @@ namespace SantafeApi.Infraestrucutre.Identity
 							context.Configuration.GetConnectionString("SantafeApiContextConnection")));
 
 					services.AddDefaultIdentity<SantafeApiUser>(options => options.SignIn.RequireConfirmedAccount = false)
+						.AddRoles<IdentityRole>()
 						.AddEntityFrameworkStores<SantafeApiContext>();
 				});
 			

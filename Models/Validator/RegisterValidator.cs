@@ -11,6 +11,16 @@ namespace SantafeApi.Models.Validator
 	{
 		public RegisterValidator()
 		{
+			RuleFor(x => x.FirstName)
+				.NotEmpty()
+				.NotNull()
+				.WithMessage("Primeiro nome é obrigatório")
+				.MaximumLength(255);
+			RuleFor(x => x.LastName)
+				.NotEmpty()
+				.NotNull()
+				.WithMessage("Último nome é obrigatório")
+				.MaximumLength(255);
 			RuleFor(x => x.Email)
 				.EmailAddress()
 				.NotEmpty()

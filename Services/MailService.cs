@@ -5,17 +5,19 @@ using MailKit;
 using MimeKit;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using SantafeApi.Options;
+using Microsoft.Extensions.Options;
 
 namespace SantafeApi.Services
 {
-	public class MailService
+	public class MailService : IMailService
 	{
-		private readonly IConfiguration _configuration;
+		private readonly EmailSettings _emailSettings;
 
-        public MailService(IConfiguration configuration)
+        public MailService(IOptions<EmailSettings> emailSettings)
         {
-			_configuration = configuration;
-        }
+			_emailSettings = emailSettings.Value;
+		}
 
 		public void SendEmail(string to, string token)
 		{
@@ -26,14 +28,9 @@ namespace SantafeApi.Services
 				$"<h2>Contato: </h2>" +
 				$"<p><a href='tel:(11) 3105-2248'> (11) 3105-2248</a></p>"; 
 				
-				
-				
-				
-					
-				
 			var message = new MimeMessage();
 
-			message.From.Add(MailboxAddress.Parse(_configuration["email:user"]));
+			message.From.Add(MailboxAddress.Parse(_emailSettings.User));
 			message.To.Add(MailboxAddress.Parse(to));
 			message.Subject = "Redefinir senha";
 			message.Body = new TextPart("html")
@@ -43,7 +40,7 @@ namespace SantafeApi.Services
 
             using var client = new SmtpClient();
             client.Connect("smtp.gmail.com", 465, true);
-            client.Authenticate(_configuration["email:user"], _configuration["email:pass"]);
+            client.Authenticate(_emailSettings.User, _emailSettings.Pass);
             client.Send(message);
             client.Disconnect(true);
         }
