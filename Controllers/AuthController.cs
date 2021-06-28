@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using SantafeApi.Data;
-using SantafeApi.Infraestrucutre.Identity.Data;
+using SantafeApi.Infraestrucutre.Data;
 using SantafeApi.Models;
 using SantafeApi.Services;
 using System;
@@ -108,7 +107,7 @@ namespace SantafeApi.Controllers
 
             var user = await _userManager.FindByEmailAsync(userInfo.Email);
 
-            if(user == null)
+            if (user == null)
             {
                 var identityUser = new SantafeApiUser
                 {

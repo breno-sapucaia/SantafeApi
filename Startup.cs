@@ -19,7 +19,7 @@ namespace SantafeApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            InstallerExtensions.InstallServicesInAssembly(services, Configuration);            
+            InstallerExtensions.InstallServicesInAssembly(services, Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -32,7 +32,7 @@ namespace SantafeApi
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SantafeApi v1"));
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
 
             app.UseRouting();
             app.UseCors(builder => builder

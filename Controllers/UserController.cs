@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SantafeApi.Infraestrucutre.Identity.Data;
+using SantafeApi.Infraestrucutre.Data;
 using SantafeApi.Models;
 using System;
 using System.Collections.Generic;
@@ -28,7 +28,7 @@ namespace SantafeApi.Controllers
         public async Task<IActionResult> ManageAccess(string userId, bool hasAccess)
         {
             var user = await _userManager.FindByIdAsync(userId);
-            if(user != null)
+            if (user != null)
             {
                 user.HasAccess = hasAccess;
                 await _userManager.UpdateAsync(user);

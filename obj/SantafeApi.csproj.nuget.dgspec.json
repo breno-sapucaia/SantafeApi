@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Projetos\\Autonomo\\SantafeCheck\\SantafeApi\\SantafeApi.csproj": {}
+    "/home/breno/Daughter/Santafe/SantafeApi/SantafeApi.csproj": {}
   },
   "projects": {
-    "C:\\Projetos\\Autonomo\\SantafeCheck\\SantafeApi\\SantafeApi.csproj": {
+    "/home/breno/Daughter/Santafe/SantafeApi/SantafeApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Projetos\\Autonomo\\SantafeCheck\\SantafeApi\\SantafeApi.csproj",
+        "projectUniqueName": "/home/breno/Daughter/Santafe/SantafeApi/SantafeApi.csproj",
         "projectName": "SantafeApi",
-        "projectPath": "C:\\Projetos\\Autonomo\\SantafeCheck\\SantafeApi\\SantafeApi.csproj",
-        "packagesPath": "C:\\Users\\breno\\.nuget\\packages\\",
-        "outputPath": "C:\\Projetos\\Autonomo\\SantafeCheck\\SantafeApi\\obj\\",
+        "projectPath": "/home/breno/Daughter/Santafe/SantafeApi/SantafeApi.csproj",
+        "packagesPath": "/home/breno/.nuget/packages/",
+        "outputPath": "/home/breno/Daughter/Santafe/SantafeApi/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\breno\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/home/breno/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -76,6 +74,12 @@
               "target": "Package",
               "version": "[5.0.5, )"
             },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[5.0.5, )"
+            },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[5.0.5, )"
@@ -117,7 +121,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.300\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/5.0.301/RuntimeIdentifierGraph.json"
         }
       }
     }

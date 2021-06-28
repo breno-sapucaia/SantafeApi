@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using SantafeApi.Data;
+using SantafeApi.Infraestrucutre.Data;
 
 namespace SantafeApi.Migrations
 {
@@ -15,6 +15,7 @@ namespace SantafeApi.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasAnnotation("Relational:Collation", "Latin1_General_CI_AS")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -154,12 +155,326 @@ namespace SantafeApi.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("SantafeApi.Infraestrucutre.Identity.Data.SantafeApiUser", b =>
+            modelBuilder.Entity("SantafeApi.Entities.Cliente", b =>
+                {
+                    b.Property<int>("CodCliente")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CnpjCliente")
+                        .IsRequired()
+                        .HasMaxLength(14)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(14)");
+
+                    b.Property<int>("CodUsuario")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DataCad")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<string>("EnderecoCliente")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("NomeCliente")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("TecResponsavel")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Telefone")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("TipoDoLocal")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.HasKey("CodCliente");
+
+                    b.ToTable("tbCliente");
+                });
+
+            modelBuilder.Entity("SantafeApi.Entities.ControleO", b =>
+                {
+                    b.Property<int>("Cod")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CodCliente")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CodUsuario")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Data")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.HasKey("Cod");
+
+                    b.HasIndex("CodCliente");
+
+                    b.ToTable("tbControleOs");
+                });
+
+            modelBuilder.Entity("SantafeApi.Entities.Item", b =>
+                {
+                    b.Property<int>("CodItem")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CodUsuario")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NomeItem")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Norma")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.HasKey("CodItem");
+
+                    b.ToTable("tbItens");
+                });
+
+            modelBuilder.Entity("SantafeApi.Entities.ItemsVistorium", b =>
+                {
+                    b.Property<int>("CodCliente")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CodItem")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CodItemVis")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CodLocal")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NomeItemVis")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("NomeLocal")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("ParamItem")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.ToTable("tbItemsVistoria");
+                });
+
+            modelBuilder.Entity("SantafeApi.Entities.Local", b =>
+                {
+                    b.Property<int>("CodLocal")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CodCliente")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NomeLocal")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("CodLocal");
+
+                    b.ToTable("tbLocal");
+                });
+
+            modelBuilder.Entity("SantafeApi.Entities.LocalItem", b =>
+                {
+                    b.Property<int>("CodLocalItem")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CodCliente")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CodItem")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NomeLocalItem")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.HasKey("CodLocalItem");
+
+                    b.ToTable("tbLocalItem");
+                });
+
+            modelBuilder.Entity("SantafeApi.Entities.Status", b =>
+                {
+                    b.Property<int>("CodItem")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CodStatus")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Gravidade")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(1)");
+
+                    b.Property<string>("NomeStatus")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.HasIndex("CodItem");
+
+                    b.ToTable("tbStatus");
+                });
+
+            modelBuilder.Entity("SantafeApi.Entities.Vistorium", b =>
+                {
+                    b.Property<int>("Cod")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CodCliente")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CodControle")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CodItem")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CodLocal")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CodStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Conformidade")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(3)");
+
+                    b.Property<int>("Gravidade")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Medidas")
+                        .IsRequired()
+                        .HasMaxLength(400)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(400)");
+
+                    b.Property<string>("NomeCliente")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("NomeImg")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(120)");
+
+                    b.Property<string>("NomeItem")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("NomeLocal")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("NomeStatus")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Param")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("TipoLocal")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.HasIndex("CodControle");
+
+                    b.HasIndex("CodItem");
+
+                    b.HasIndex("CodLocal");
+
+                    b.ToTable("tbVistoria");
+                });
+
+            modelBuilder.Entity("SantafeApi.Infraestrucutre.Data.SantafeApiUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CodCliente")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -171,6 +486,9 @@ namespace SantafeApi.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasAccess")
                         .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")
@@ -206,10 +524,11 @@ namespace SantafeApi.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<bool>("hasAccess")
-                        .HasColumnType("bit");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("CodCliente")
+                        .IsUnique()
+                        .HasFilter("[CodCliente] IS NOT NULL");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -233,7 +552,7 @@ namespace SantafeApi.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("SantafeApi.Infraestrucutre.Identity.Data.SantafeApiUser", null)
+                    b.HasOne("SantafeApi.Infraestrucutre.Data.SantafeApiUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -242,7 +561,7 @@ namespace SantafeApi.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("SantafeApi.Infraestrucutre.Identity.Data.SantafeApiUser", null)
+                    b.HasOne("SantafeApi.Infraestrucutre.Data.SantafeApiUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -257,7 +576,7 @@ namespace SantafeApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SantafeApi.Infraestrucutre.Identity.Data.SantafeApiUser", null)
+                    b.HasOne("SantafeApi.Infraestrucutre.Data.SantafeApiUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -266,11 +585,76 @@ namespace SantafeApi.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("SantafeApi.Infraestrucutre.Identity.Data.SantafeApiUser", null)
+                    b.HasOne("SantafeApi.Infraestrucutre.Data.SantafeApiUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("SantafeApi.Entities.ControleO", b =>
+                {
+                    b.HasOne("SantafeApi.Entities.Cliente", "CodClienteNavigation")
+                        .WithMany("ControleOs")
+                        .HasForeignKey("CodCliente")
+                        .HasConstraintName("FK_tbControleOs_tbCliente")
+                        .IsRequired();
+
+                    b.Navigation("CodClienteNavigation");
+                });
+
+            modelBuilder.Entity("SantafeApi.Entities.Status", b =>
+                {
+                    b.HasOne("SantafeApi.Entities.Item", "CodItemNavigation")
+                        .WithMany()
+                        .HasForeignKey("CodItem")
+                        .HasConstraintName("FK_tbStatus_tbItens")
+                        .IsRequired();
+
+                    b.Navigation("CodItemNavigation");
+                });
+
+            modelBuilder.Entity("SantafeApi.Entities.Vistorium", b =>
+                {
+                    b.HasOne("SantafeApi.Entities.ControleO", "CodControleNavigation")
+                        .WithMany()
+                        .HasForeignKey("CodControle")
+                        .HasConstraintName("FK_tbVistoria_tbControleOs1")
+                        .IsRequired();
+
+                    b.HasOne("SantafeApi.Entities.Item", "CodItemNavigation")
+                        .WithMany()
+                        .HasForeignKey("CodItem")
+                        .HasConstraintName("FK_tbVistoria_tbItens")
+                        .IsRequired();
+
+                    b.HasOne("SantafeApi.Entities.Local", "CodLocalNavigation")
+                        .WithMany()
+                        .HasForeignKey("CodLocal")
+                        .HasConstraintName("FK_tbVistoria_tbLocal")
+                        .IsRequired();
+
+                    b.Navigation("CodControleNavigation");
+
+                    b.Navigation("CodItemNavigation");
+
+                    b.Navigation("CodLocalNavigation");
+                });
+
+            modelBuilder.Entity("SantafeApi.Infraestrucutre.Data.SantafeApiUser", b =>
+                {
+                    b.HasOne("SantafeApi.Entities.Cliente", "ClienteNavigation")
+                        .WithOne("CodUseruarioNavigation")
+                        .HasForeignKey("SantafeApi.Infraestrucutre.Data.SantafeApiUser", "CodCliente");
+
+                    b.Navigation("ClienteNavigation");
+                });
+
+            modelBuilder.Entity("SantafeApi.Entities.Cliente", b =>
+                {
+                    b.Navigation("CodUseruarioNavigation");
+
+                    b.Navigation("ControleOs");
                 });
 #pragma warning restore 612, 618
         }
