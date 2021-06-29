@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SantafeApi.Services
+namespace SantafeApi.Services.Interfaces
 {
-    public interface IMailService
+    public interface IMailApiService
     {
         void SendEmail(string to, string token);
     }

@@ -2,15 +2,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using SantafeApi.Infraestrucutre.Data;
 using SantafeApi.Models;
-using SantafeApi.Services;
+using SantafeApi.Services.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,13 +21,13 @@ namespace SantafeApi.Controllers
         private SantafeApiContext _dbContext;
         private readonly UserManager<SantafeApiUser> _userManager;
         private readonly SignInManager<SantafeApiUser> _signInManager;
-        private readonly IMailService _mailService;
+        private readonly IMailApiService _mailService;
         private readonly IFacebookAuthService _facebookAuthService;
         private readonly IIdentityService _identityService;
         public AuthController(
             IConfiguration configuration, SantafeApiContext dbContext,
             UserManager<SantafeApiUser> userManager, SignInManager<SantafeApiUser> signInManager,
-            IMailService mailService, IFacebookAuthService facebookAuthService,
+            IMailApiService mailService, IFacebookAuthService facebookAuthService,
             IIdentityService identityService
             )
         {

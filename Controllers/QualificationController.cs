@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SantafeApi.Infraestrucutre.Data;
 
@@ -9,6 +10,7 @@ namespace SantafeApi
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class QualificationController : ControllerBase
     {
         private readonly SantafeApiContext _dbContext;

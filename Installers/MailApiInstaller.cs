@@ -2,11 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using SantafeApi.Options;
 using SantafeApi.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
+using SantafeApi.Services.Interfaces;
 namespace SantafeApi.Installers
 {
     public class MailInstaller : IInstaller
@@ -16,7 +12,7 @@ namespace SantafeApi.Installers
             var emailSettingsSection = configuration.GetSection("Email");
             services.Configure<EmailSettings>(emailSettingsSection);
             services.AddSingleton(emailSettingsSection);
-            services.AddSingleton<IMailService, MailService>();
+            services.AddSingleton<IMailApiService, MailApiService>();
         }
     }
 }
