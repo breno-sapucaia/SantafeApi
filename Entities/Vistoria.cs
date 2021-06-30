@@ -5,13 +5,15 @@ using System.Collections.Generic;
 
 namespace SantafeApi.Entities
 {
-    public partial class Vistorium
+    public partial class Vistoria
     {
         public int Cod { get; set; }
         public int CodControle { get; set; }
         public int CodCliente { get; set; }
         public string NomeCliente { get; set; }
         public string TipoLocal { get; set; }
+        public int CodBloco { get; set; }
+        public string NomeBloco { get; set; }
         public int CodLocal { get; set; }
         public string NomeLocal { get; set; }
         public int CodItem { get; set; }
@@ -24,8 +26,6 @@ namespace SantafeApi.Entities
         public string Medidas { get; set; }
         public string NomeImg { get; set; }
 
-        public virtual ControleO CodControleNavigation { get; set; }
-        public virtual Item CodItemNavigation { get; set; }
-        public virtual Local CodLocalNavigation { get; set; }
+        public virtual ControleOs CodControleNavigation { get; set; }
     }
 }

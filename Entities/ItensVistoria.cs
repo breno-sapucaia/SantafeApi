@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace SantafeApi.Entities
 {
-    public partial class ItemsVistorium
+    public partial class ItensVistoria
     {
         public int CodItemVis { get; set; }
         public int CodLocal { get; set; }
@@ -14,6 +14,9 @@ namespace SantafeApi.Entities
         public int CodCliente { get; set; }
         public string NomeItemVis { get; set; }
         public string ParamItem { get; set; }
+        public int CodUsuario { get; set; }
 
+        public virtual Item CodItemNavigation { get; set; }
+        public virtual Local CodLocalNavigation { get; set; }
     }
 }

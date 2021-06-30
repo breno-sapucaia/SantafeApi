@@ -5,6 +5,6 @@ namespace SantafeApi.Services.Interfaces
 {
     public interface IQualificationService
     {
-        QualificationModel GetQualificationReport(int codCliente, int codControle, int codVistoria, int codItem, DateTime start, DateTime end);
+        QualificationModel GetQualificationReport(int codCliente, DateTime start, DateTime end);
     }
 }
