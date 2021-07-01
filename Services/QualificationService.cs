@@ -4,6 +4,7 @@ using System.Linq;
 using SantafeApi.Infraestrucutre.Data;
 using SantafeApi.Services.Interfaces;
 using System.Globalization;
+using System.Collections.Generic;
 
 namespace SantafeApi.Services
 {
@@ -15,13 +16,13 @@ namespace SantafeApi.Services
         {
             _dbContext = dbContext;
         }
-        public QualificationModel GetQualificationReport(int codCliente, DateTime start, DateTime end)
+        public IEnumerable<QualificationModel> GetQualificationReport(int codCliente, DateTime start, DateTime end)
         {
-            var codControleOs = GetAllControleOs(codCliente, start, end);
+            var codControleOs = GetAllCodControleOs(codCliente, start, end);
             Console.WriteLine($"codControleOs: {codControleOs.Length}");
-            var vistorias = _dbContext.Vistorias.Where(vistoria => codControleOs.Contains(vistoria.CodControle));
+            var vistorias = _dbContext.Vistorias.Where(vistoria => codControleOs.Contains(vistoria.CodControle)).ToList();
 
-            var qualificationModel = vistorias.AsEnumerable().Select(vistoria =>
+            var listQualificationModel = vistorias.Select(vistoria =>
             {
                 var itensConformes = vistorias.Where(vistoriaConforme => vistoriaConforme.Conformidade == Conformidade.CONFORME && vistoriaConforme.CodItem == vistoria.CodItem).Count();
                 var itensNaoConformes = vistorias.Where(vistoriaConforme => vistoriaConforme.Conformidade == Conformidade.NAO_CONFORME && vistoriaConforme.CodItem == vistoria.CodItem).Count();
@@ -32,22 +33,19 @@ namespace SantafeApi.Services
                     Conforme = itensConformes,
                     NaoConforme = itensNaoConformes
                 };
-            }).First();
+            }).Distinct(new ComparadorQualificacao()).ToList();
 
 
-            return qualificationModel;
+            return listQualificationModel;
         }
 
-        private int[] GetAllControleOs(int codCliente, DateTime start, DateTime end)
+        private int[] GetAllCodControleOs(int codCliente, DateTime minDate, DateTime maxdate)
         {
             var clientOs = _dbContext.ControleOs.Where(x => x.CodCliente == codCliente).ToList();
             clientOs.ForEach(c => Console.WriteLine(c.DataVistoria));
-            var allCodOs = clientOs.Where(cos =>
-            {
-                var dataVistoria = Convert.ToDateTime(cos.DataVistoria);
-                return dataVistoria > start && dataVistoria < end;
-            })
-            .Select(cos => cos.Cod).ToArray();
+            var allCodOs = clientOs
+            .Where(cos => Convert.ToDateTime(cos.DataVistoria) >= minDate && Convert.ToDateTime(cos.DataVistoria) <= maxdate)
+            .Select(controle => controle.Cod).ToArray();
 
             return allCodOs;
         }

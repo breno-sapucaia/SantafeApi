@@ -15,20 +15,15 @@ namespace SantafeApi
     public class QualificationController : ControllerBase
     {
         private readonly IQualificationService _qualificationService;
-        private readonly SantafeApiContext _dbContext;
-        public QualificationController(SantafeApiContext dbContext, IQualificationService qualificationService)
+
+        public QualificationController(IQualificationService qualificationService)
         {
             _qualificationService = qualificationService;
-            _dbContext = dbContext;
         }
         [HttpGet]
         public IActionResult GetErick(int codCliente, DateTime start, DateTime end)
         {
             var qualifications = _qualificationService.GetQualificationReport(codCliente, start, end);
-            Console.WriteLine(codCliente);
-            Console.WriteLine(start);
-            Console.WriteLine(end);
-            Console.WriteLine(qualifications);
             return Ok(qualifications);
         }
     }
