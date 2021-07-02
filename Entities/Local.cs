@@ -10,5 +10,9 @@ namespace SantafeApi.Entities
         public int CodLocal { get; set; }
         public int CodCliente { get; set; }
         public string NomeLocal { get; set; }
+        public int CodBloco { get; set; }
+        public string NomeBloco { get; set; }
+
+        public virtual Bloco CodBlocoNavigation { get; set; }
     }
 }

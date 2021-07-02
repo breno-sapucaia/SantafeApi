@@ -13,22 +13,42 @@ namespace SantafeApi.Infraestrucutre.Data
 {
     public partial class SantafeApiContext : IdentityDbContext<SantafeApiUser>
     {
+        //TODO: mapear connection string do appsettings.json 
         public SantafeApiContext(DbContextOptions<SantafeApiContext> options)
             : base(options)
         {
         }
         public virtual DbSet<Cliente> Clientes { get; set; }
-        public virtual DbSet<ControleO> ControleO { get; set; }
-        public virtual DbSet<ItemsVistorium> ItemsVistoria { get; set; }
-        public virtual DbSet<Item> Items { get; set; }
+        public virtual DbSet<ControleOs> ControleOs { get; set; }
+        public virtual DbSet<ItensVistoria> ItensVistorias { get; set; }
+        public virtual DbSet<Item> Itens { get; set; }
         public virtual DbSet<Local> Locals { get; set; }
-        public virtual DbSet<LocalItem> LocalItems { get; set; }
         public virtual DbSet<Status> Status { get; set; }
-        public virtual DbSet<Vistorium> Vistoria { get; set; }
+        public virtual DbSet<Vistoria> Vistorias { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.HasAnnotation("Relational:Collation", "Latin1_General_CI_AS");
+
+
+
+            modelBuilder.Entity<Bloco>(entity =>
+            {
+                entity.HasKey(e => e.CodBloco);
+
+                entity.ToTable("tbBloco");
+
+                entity.Property(e => e.NomeBloco)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.CodClienteNavigation)
+                    .WithMany(p => p.Blocos)
+                    .HasForeignKey(d => d.CodCliente)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tbBloco_tbCliente");
+            });
 
             modelBuilder.Entity<Cliente>(entity =>
             {
@@ -38,7 +58,7 @@ namespace SantafeApi.Infraestrucutre.Data
 
                 entity.Property(e => e.CnpjCliente)
                     .IsRequired()
-                    .HasMaxLength(14)
+                    .HasMaxLength(20)
                     .IsUnicode(false);
 
                 entity.Property(e => e.DataCad)
@@ -48,7 +68,7 @@ namespace SantafeApi.Infraestrucutre.Data
 
                 entity.Property(e => e.Email)
                     .IsRequired()
-                    .HasMaxLength(30)
+                    .HasMaxLength(100)
                     .IsUnicode(false);
 
                 entity.Property(e => e.EnderecoCliente)
@@ -58,7 +78,7 @@ namespace SantafeApi.Infraestrucutre.Data
 
                 entity.Property(e => e.NomeCliente)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasMaxLength(100)
                     .IsUnicode(false);
 
                 entity.Property(e => e.TecResponsavel)
@@ -75,16 +95,9 @@ namespace SantafeApi.Infraestrucutre.Data
                     .IsRequired()
                     .HasMaxLength(20)
                     .IsUnicode(false);
-
-                entity.HasOne(c => c.CodUseruarioNavigation)
-                .WithOne(b => b.ClienteNavigation)
-                .HasForeignKey<SantafeApiUser>(b => b.CodCliente);
-
-
-
             });
 
-            modelBuilder.Entity<ControleO>(entity =>
+            modelBuilder.Entity<ControleOs>(entity =>
             {
                 entity.HasKey(e => e.Cod);
 
@@ -95,14 +108,18 @@ namespace SantafeApi.Infraestrucutre.Data
                     .HasMaxLength(20)
                     .IsUnicode(false);
 
+                entity.Property(e => e.DataVistoria)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
                 entity.HasOne(d => d.CodClienteNavigation)
                     .WithMany(p => p.ControleOs)
                     .HasForeignKey(d => d.CodCliente)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_tbControleOs_tbCliente");
+                    .HasConstraintName("FK_tbControleOs_tbCliente1");
             });
 
-            modelBuilder.Entity<ItemsVistorium>(entity =>
+            modelBuilder.Entity<ItensVistoria>(entity =>
             {
                 entity.HasNoKey();
 
@@ -123,6 +140,18 @@ namespace SantafeApi.Infraestrucutre.Data
                 entity.Property(e => e.ParamItem)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.CodItemNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.CodItem)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tbItemsVistoria_tbItens");
+
+                entity.HasOne(d => d.CodLocalNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.CodLocal)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tbItemsVistoria_tbLocal");
             });
 
             modelBuilder.Entity<Item>(entity =>
@@ -147,22 +176,21 @@ namespace SantafeApi.Infraestrucutre.Data
 
                 entity.ToTable("tbLocal");
 
+                entity.Property(e => e.NomeBloco)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.NomeLocal)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasMaxLength(100)
                     .IsUnicode(false);
-            });
 
-            modelBuilder.Entity<LocalItem>(entity =>
-            {
-                entity.HasKey(e => e.CodLocalItem);
-
-                entity.ToTable("tbLocalItem");
-
-                entity.Property(e => e.NomeLocalItem)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
+                entity.HasOne(d => d.CodBlocoNavigation)
+                    .WithMany(p => p.Locals)
+                    .HasForeignKey(d => d.CodBloco)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tbLocal_tbBloco");
             });
 
             modelBuilder.Entity<Status>(entity =>
@@ -190,7 +218,43 @@ namespace SantafeApi.Infraestrucutre.Data
                     .HasConstraintName("FK_tbStatus_tbItens");
             });
 
-            modelBuilder.Entity<Vistorium>(entity =>
+            modelBuilder.Entity<Usuario>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("tbUsuario");
+
+                entity.Property(e => e.CodUsuario)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("codUsuario");
+
+                entity.Property(e => e.DataCad)
+                    .IsRequired()
+                    .HasMaxLength(30)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.DomUsuario)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.LoguinUsuario)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NomeUsuario)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PwdUsuario)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Vistoria>(entity =>
             {
                 entity.HasNoKey();
 
@@ -206,6 +270,11 @@ namespace SantafeApi.Infraestrucutre.Data
                 entity.Property(e => e.Medidas)
                     .IsRequired()
                     .HasMaxLength(400)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NomeBloco)
+                    .IsRequired()
+                    .HasMaxLength(100)
                     .IsUnicode(false);
 
                 entity.Property(e => e.NomeCliente)
@@ -247,31 +316,19 @@ namespace SantafeApi.Infraestrucutre.Data
                     .WithMany()
                     .HasForeignKey(d => d.CodControle)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_tbVistoria_tbControleOs1");
-
-                entity.HasOne(d => d.CodItemNavigation)
-                    .WithMany()
-                    .HasForeignKey(d => d.CodItem)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_tbVistoria_tbItens");
-
-                entity.HasOne(d => d.CodLocalNavigation)
-                    .WithMany()
-                    .HasForeignKey(d => d.CodLocal)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_tbVistoria_tbLocal");
+                    .HasConstraintName("FK_tbVistoria_tbControleOs");
             });
 
             OnModelCreatingPartial(modelBuilder);
-
         }
+
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=localhost, 1401;Database=DbSantaHelena;User Id=SA;Password=rootAdmin123;");
+                optionsBuilder.UseSqlServer("Server=localhost, 1401;Database=DbSantaHelena2;User Id=SA;Password=rootAdmin123;");
             }
         }
 

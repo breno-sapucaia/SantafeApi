@@ -5,24 +5,26 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SantafeApi.Infraestrucutre.Data;
+using SantafeApi.Services;
+using SantafeApi.Services.Interfaces;
 
 namespace SantafeApi
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class QualificationController : ControllerBase
     {
-        private readonly SantafeApiContext _dbContext;
-        public QualificationController(SantafeApiContext dbContext)
+        private readonly IQualificationService _qualificationService;
+
+        public QualificationController(IQualificationService qualificationService)
         {
-            _dbContext = dbContext;
+            _qualificationService = qualificationService;
         }
         [HttpGet]
-        public IActionResult GetErick()
+        public IActionResult GetErick(int codCliente, DateTime start, DateTime end)
         {
-            var list = _dbContext.Vistoria.Where(e => e.NomeCliente == "Erick Bessa De Souza").ToList();
-            return Ok(list);
+            var qualifications = _qualificationService.GetQualificationReport(codCliente, start, end);
+            return Ok(qualifications);
         }
     }
 }
