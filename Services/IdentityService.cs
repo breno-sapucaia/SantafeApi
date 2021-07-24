@@ -34,10 +34,17 @@ namespace SantafeApi.Services
             var userRole = role.FirstOrDefault(e => e.ToLower() == "admin" || e.ToLower() == "customer");
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_configuration["Identity:Key"]);
+
+            var codCliente = 0;
+            if (user.CodCliente.HasValue)
+                codCliente = user.CodCliente.Value;
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
+                        new Claim("UserId", user.Id),
+                        new Claim("ClientId", codCliente.ToString()),
                         new Claim(ClaimTypes.Email, user.Email),
                         new Claim(ClaimTypes.Role, userRole)
                 }),
