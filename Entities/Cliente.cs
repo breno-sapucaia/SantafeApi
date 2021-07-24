@@ -10,7 +10,6 @@ namespace SantafeApi.Entities
     {
         public Cliente()
         {
-            SantafeApiUser = new HashSet<SantafeApiUser>();
             Blocos = new HashSet<Bloco>();
             ControleOs = new HashSet<ControleOs>();
         }
@@ -23,10 +22,10 @@ namespace SantafeApi.Entities
         public string TipoDoLocal { get; set; }
         public string Email { get; set; }
         public string Telefone { get; set; }
-        public int CodUsuario { get; set; }
+        public string CodUsuario { get; set; }
         public string DataCad { get; set; }
 
-        public virtual ICollection<SantafeApiUser> SantafeApiUser { get; set; }
+        public virtual SantafeApiUser SantafeApiUser { get; set; }
         public virtual ICollection<Bloco> Blocos { get; set; }
         public virtual ICollection<ControleOs> ControleOs { get; set; }
     }

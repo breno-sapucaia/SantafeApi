@@ -8,8 +8,6 @@ namespace SantafeApi.Services
         public string ItemName { get; set; }
         public int Conforme { get; set; }
         public int NaoConforme { get; set; }
-
-
     }
 
     public class ComparadorQualificacao : IEqualityComparer<QualificationModel>

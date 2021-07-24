@@ -5,6 +5,7 @@ using SantafeApi.Infraestrucutre.Data;
 using SantafeApi.Services.Interfaces;
 using System.Globalization;
 using System.Collections.Generic;
+using SantafeApi.Utils.Consts;
 
 namespace SantafeApi.Services
 {
@@ -50,10 +51,5 @@ namespace SantafeApi.Services
             return allCodOs;
         }
 
-        public static class Conformidade
-        {
-            public const string CONFORME = "C";
-            public const string NAO_CONFORME = "NC";
-        }
     }
 }

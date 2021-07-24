@@ -24,11 +24,12 @@ namespace SantafeApi.Controllers
         private readonly IMailApiService _mailService;
         private readonly IFacebookAuthService _facebookAuthService;
         private readonly IIdentityService _identityService;
+        private readonly RoleManager<IdentityRole> _roleManager;
         public AuthController(
             IConfiguration configuration, SantafeApiContext dbContext,
             UserManager<SantafeApiUser> userManager, SignInManager<SantafeApiUser> signInManager,
             IMailApiService mailService, IFacebookAuthService facebookAuthService,
-            IIdentityService identityService
+            IIdentityService identityService, RoleManager<IdentityRole> roleManager
             )
         {
             _configuration = configuration;
@@ -38,6 +39,7 @@ namespace SantafeApi.Controllers
             _mailService = mailService;
             _facebookAuthService = facebookAuthService;
             _identityService = identityService;
+            _roleManager = roleManager;
         }
         /// <summary>
         ///		Efetua o login no sistema e gerar um token do tipo - Bearer JWT
@@ -112,8 +114,12 @@ namespace SantafeApi.Controllers
                     HasAccess = false
                 };
 
+                if (!await _roleManager.RoleExistsAsync("CUSTOMER"))
+                    await _roleManager.CreateAsync(new IdentityRole("CUSTOMER"));
+
+                await _userManager.AddToRoleAsync(identityUser, "CUSTOMER");
+
                 var createdResult = await _userManager.CreateAsync(identityUser);
-                await _userManager.AddToRoleAsync(identityUser, "Customer");
                 if (!createdResult.Succeeded)
                 {
                     var stringBuilder = new StringBuilder();
@@ -153,10 +159,11 @@ namespace SantafeApi.Controllers
             };
 
             var result = await _userManager.CreateAsync(santafeApiUser, registerModel.Password);
-            await _userManager.AddToRoleAsync(santafeApiUser, "Customer");
+
             if (result.Succeeded)
             {
-                //TODO: enviar email com token.
+                if (await _roleManager.RoleExistsAsync("CUSTOMER"))
+                    await _userManager.AddToRoleAsync(santafeApiUser, "CUSTOMER");
                 return Ok(new { Message = "Usuário criado com sucesso" });
             }
             else

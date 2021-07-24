@@ -95,6 +95,11 @@ namespace SantafeApi.Infraestrucutre.Data
                     .IsRequired()
                     .HasMaxLength(20)
                     .IsUnicode(false);
+
+                entity.HasOne<SantafeApiUser>(c => c.SantafeApiUser)
+                    .WithOne(s => s.ClienteNavigation)
+                    .HasForeignKey<SantafeApiUser>(s => s.CodCliente);
+
             });
 
             modelBuilder.Entity<ControleOs>(entity =>
