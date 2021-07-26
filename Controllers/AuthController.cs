@@ -151,6 +151,10 @@ namespace SantafeApi.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel registerModel)
         {
+            var persistedUser = await _userManager.FindByEmailAsync(registerModel.Email);
+            if (persistedUser != null)
+                BadRequest(new ErrorModel("Email já cadastrado"));
+
             SantafeApiUser santafeApiUser = new()
             {
                 Email = registerModel.Email,

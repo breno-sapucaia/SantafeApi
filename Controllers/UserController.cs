@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SantafeApi.Infraestrucutre.Data;
 using SantafeApi.Models;
+using SantafeApi.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,28 +18,31 @@ namespace SantafeApi.Controllers
     public class UserController : ControllerBase
     {
 
-        private readonly UserManager<SantafeApiUser> _userManager;
+        public IUserService UserService;
 
-        public UserController(UserManager<SantafeApiUser> userManager)
+        public UserController(IUserService userService)
         {
-            _userManager = userManager;
+            UserService = userService;
         }
 
         [HttpPut("manage-access")]
-        public async Task<IActionResult> ManageAccess(string userId, bool hasAccess)
+        public async Task<IActionResult> ManageAccess(UserAccessModel model)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await UserService.ManageUserAccessAsync(model.UserId, model.CodCliente, model.HasAccess);
             if (user != null)
             {
-                user.HasAccess = hasAccess;
-                await _userManager.UpdateAsync(user);
-                if (hasAccess)
+                if (user.HasAccess)
                     return Ok($"Acesso do usuário: {user.UserName} liberado.");
 
                 return Ok($"Acesso do usuário: {user.UserName} revogado.");
             }
             return BadRequest(new ErrorModel { Message = "Usuário não encontrado." });
         }
-
+        [HttpPut("manage-all-access")]
+        public async Task<IActionResult> ManageAllAccess(List<UserAccessModel> model)
+        {
+            var user = await UserService.ManageAllUserAccessAsync(model);
+            return Ok(user);
+        }
     }
 }

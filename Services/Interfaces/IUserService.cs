@@ -1,10 +1,14 @@
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using SantafeApi.Infraestrucutre.Data;
+using SantafeApi.Models;
 
 namespace SantafeApi.Services.Interfaces
 {
-    public interface IUserService
+    public interface IUserService : IDisposable
     {
-        Task<SantafeApiUser> ManageUserAccess(string userId, string clientId, bool hasAccess);
+        Task<SantafeApiUser> ManageUserAccessAsync(string codUser, int codCliente, bool hasAccess);
+        Task<Dictionary<string, List<UserModel>>> ManageAllUserAccessAsync(List<UserAccessModel> usersModel);
     }
 }

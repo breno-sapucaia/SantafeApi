@@ -25,6 +25,7 @@ namespace SantafeApi.Infraestrucutre.Data
         public virtual DbSet<Local> Locals { get; set; }
         public virtual DbSet<Status> Status { get; set; }
         public virtual DbSet<Vistoria> Vistorias { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -98,7 +99,8 @@ namespace SantafeApi.Infraestrucutre.Data
 
                 entity.HasOne<SantafeApiUser>(c => c.SantafeApiUser)
                     .WithOne(s => s.ClienteNavigation)
-                    .HasForeignKey<SantafeApiUser>(s => s.CodCliente);
+                    .HasForeignKey<SantafeApiUser>(s => s.CodCliente)
+                    .OnDelete(DeleteBehavior.SetNull);
 
             });
 
@@ -221,42 +223,6 @@ namespace SantafeApi.Infraestrucutre.Data
                     .HasForeignKey(d => d.CodItem)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tbStatus_tbItens");
-            });
-
-            modelBuilder.Entity<Usuario>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToTable("tbUsuario");
-
-                entity.Property(e => e.CodUsuario)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("codUsuario");
-
-                entity.Property(e => e.DataCad)
-                    .IsRequired()
-                    .HasMaxLength(30)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.DomUsuario)
-                    .IsRequired()
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.LoguinUsuario)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.NomeUsuario)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.PwdUsuario)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Vistoria>(entity =>

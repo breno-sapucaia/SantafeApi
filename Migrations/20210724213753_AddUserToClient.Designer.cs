@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SantafeApi.Infraestrucutre.Data;
 
 namespace SantafeApi.Migrations
 {
     [DbContext(typeof(SantafeApiContext))]
-    partial class SantafeApiContextModelSnapshot : ModelSnapshot
+    [Migration("20210724213753_AddUserToClient")]
+    partial class AddUserToClient
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -697,8 +699,7 @@ namespace SantafeApi.Migrations
                 {
                     b.HasOne("SantafeApi.Entities.Cliente", "ClienteNavigation")
                         .WithOne("SantafeApiUser")
-                        .HasForeignKey("SantafeApi.Infraestrucutre.Data.SantafeApiUser", "CodCliente")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("SantafeApi.Infraestrucutre.Data.SantafeApiUser", "CodCliente");
 
                     b.Navigation("ClienteNavigation");
                 });
